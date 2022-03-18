@@ -9,7 +9,7 @@ import { ReactComponent as LockOutlinedIcon } from '../../assets/svg/money-icon.
 import Typography from '@mui/material/Typography';
 import Banner from '../../assets/images/login-banner.png';
 import { loginWithGoogle } from '../../utils/Auth/google-authentication';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 export default function Login() {
 
   const history = useHistory();

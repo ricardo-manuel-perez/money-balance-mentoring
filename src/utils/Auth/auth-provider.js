@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {useQuery, useQueryClient} from 'react-query';
 import { auth } from '../../services/firebase';
 
-// export const useProvideAuth = () => {
+// export const UseProvideAuth = () => {
 
 //   const [user, setUser] = useState(() => {
 //     const localUser =  JSON.parse(localStorage.getItem("user"));
@@ -41,7 +41,7 @@ import { auth } from '../../services/firebase';
 //   };
 // }
 
-export const useProvideAuth = () => {
+export const UseProvideAuth = () => {
   const queryClient = useQueryClient();
   useEffect(() => {
     const unsuscribeSession = auth.onAuthStateChanged((session) => {
