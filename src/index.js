@@ -5,10 +5,11 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
+import createBrowserHistory from './history';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router history={history}>
+    <Router history={createBrowserHistory}>
       <App />
     </Router>
   </React.StrictMode>,
