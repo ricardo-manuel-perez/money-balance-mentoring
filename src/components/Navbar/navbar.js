@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ReactComponent as HomeLogo } from '../../assets/svg/money-icon.svg';
 import { useAuth } from '../../utils/Auth/use-auth';
+import './navbar.css';
 
 const pages = [];
 const settings = ['Logout'];
@@ -40,7 +41,7 @@ const Navbar = () => {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className='navbar'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -111,14 +112,18 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Typography color="white" component="h1" variant="h6" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+              <Box className='user-name'>
+                <Typography color="white" component="h1" variant="h6">
                   { user.displayName } 
                 </Typography>
-                <Avatar alt={ user.displayName } src={ user.photoURL } />
-              </IconButton>
-            </Tooltip>
+              </Box>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={ user.displayName } src={ user.photoURL } />
+                </IconButton>
+              </Tooltip>
+            </Box>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

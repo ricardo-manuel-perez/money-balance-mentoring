@@ -1,3 +1,31 @@
 .home {
   text-align: center;
+  margin: 1rem 10rem;
+  padding: 1rem;
+}
+.account-card {
+  margin: 1rem;
+}
+.add-button {
+  max-width: 20rem;
+  background-color: #6cc070;
+
+}
+.edit-button {
+  max-width: 10rem;
+  background-color: #003663;
+}
+.delete-button {
+  max-width: 10rem;
+  margin-left: 3rem !important;
+  background-color: #ff3333;
+}
+.column {
+  float: left;
+  width: 33.33%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
