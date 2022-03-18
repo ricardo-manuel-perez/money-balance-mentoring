@@ -1,4 +1,4 @@
-import { signInWithPopup, GoogleAuthProvider, browserSessionPersistence, setPersistence } from 'firebase/auth';
+import { signInWithPopup, browserSessionPersistence, setPersistence } from 'firebase/auth';
 import { auth, googleAuthProvider } from '../../services/firebase';
 
 

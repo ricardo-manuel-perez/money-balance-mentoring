@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import {useQuery, useQueryClient} from 'react-query';
-import { getAuth, signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
+import { auth } from '../../services/firebase';
 
 // export const useProvideAuth = () => {
 

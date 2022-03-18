@@ -19,7 +19,11 @@ const pages = [];
 const settings = ['Logout'];
 
 const Navbar = () => {
-  const { user, Logout } = useAuth();
+  const auth = useAuth();
+  const user = auth.data ? auth.data.user : undefined;
+  const Logout = () => {
+    return;
+  }
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 

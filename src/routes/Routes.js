@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -14,7 +15,7 @@ const ProtectedRoute = ({ route, auth }) => {
     <Route path={route.path} render={(props, location) => {
       if (auth.data && !auth.error && !auth.isLoading) {
         return <route.component {...props} />
-      } else if (!isLoading && !auth.data || (error && !isLoading)) {
+      } else if (!auth.isLoading && !auth.data || (auth.error && !auth.isLoading)) {
         return <Redirect to={{
           pathname: '/login',
           state: { from: location }
@@ -27,15 +28,14 @@ const ProtectedRoute = ({ route, auth }) => {
 const Routes = () => {
   // auth = {isLoading, error, data:{user}}
   const auth = useAuth();
-  const userLoggedIn = auth.user;
   return (
     <Router>
       <Switch>
-        {/* <Route
+        <Route
           path={'/login'}
           exact={true}
-          render={() => auth.data ? <Redirect to={{ pathname: '/home' }} /> : <Login />}
-        /> */}
+          render={Login}
+        />
         <ProtectedRoute
           path={'/home'}
           auth={auth}
