@@ -4,8 +4,8 @@ import { useProvideAuth } from './auth-provider';
 
 const authContext = createContext();
 export function AuthProvider({ children }) {
-  const auth = useProvideAuth();
-  return <authContext.Provider value={ auth }>{children}</authContext.Provider>;
+  const { isLoading, error, data } = useProvideAuth();
+  return <authContext.Provider value={{ isLoading, error, data }}>{children}</authContext.Provider>;
 }
 
 AuthProvider.propTypes = {
