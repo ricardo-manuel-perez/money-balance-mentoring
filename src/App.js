@@ -12,16 +12,14 @@ function App() {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <AuthProvider>
-            <Suspense fallback={<div>Loading ...</div>}>
-              <Routes />
-            </Suspense>
-          </AuthProvider>
-        </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <Suspense fallback={<div>Loading ...</div>}>
+            <Routes />
+          </Suspense>
+        </AuthProvider>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
