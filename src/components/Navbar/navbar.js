@@ -14,18 +14,23 @@ import MenuItem from '@mui/material/MenuItem';
 import { ReactComponent as HomeLogo } from '../../assets/svg/money-icon.svg';
 import { useAuth } from '../../utils/Auth/use-auth';
 import './navbar.css';
+import { logout } from '../../utils/Auth/google-authentication';
 
 const pages = [];
 const settings = ['Logout'];
 
 const Navbar = () => {
   const auth = useAuth();
-  const Logout = () => {
-    alert('ToDo Logout!!');
-    return;
-  }
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const onLogoutSuccess = (data) => {
+    console.log(data);
+  };
+
+  function handleLogout() {
+    logout(onLogoutSuccess);
+  }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -40,7 +45,7 @@ const Navbar = () => {
 
   function handleCloseUserMenu(setting) {
     if(setting === 'Logout')
-      Logout();
+      handleLogout();
     setAnchorElUser(null);
   }
 
