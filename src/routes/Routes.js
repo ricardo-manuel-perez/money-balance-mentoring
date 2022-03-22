@@ -10,7 +10,7 @@ import Login from '../components/Login/login';
 import { useAuth } from '../utils/Auth/use-auth';
 import Home from '../components/Home/home';
 
-const ProtectedRoute = ({ route, auth }) => {
+/*const ProtectedRoute = ({ route, auth }) => {
   return (
     <Route path={route.path} render={(props, location) => {
       if (auth.data && !auth.error && !auth.isLoading) {
@@ -23,6 +23,14 @@ const ProtectedRoute = ({ route, auth }) => {
       }
     }} />
   )
+}*/
+
+const isUserLoggedIn = (auth) => {
+  if (auth.data && !auth.error && !auth.isLoading) {
+    return true;
+  } else if (!auth.isLoading && !auth.data || (auth.error && !auth.isLoading)) {
+    return false;
+  }
 }
 
 const Routes = () => {
@@ -34,17 +42,17 @@ const Routes = () => {
         <Route
           path={'/login'}
           exact={true}
-          render={Login}
+          render={() => isUserLoggedIn(auth) ? <Redirect to={{ pathname: '/home' }} /> : <Login />}
         />
-        <ProtectedRoute
+        <Route
           path={'/home'}
           auth={auth}
-          render={Home}
+          render={() => isUserLoggedIn(auth) ? <Home /> : <Redirect to={{ pathname: '/login' }} />}
         />
         <Route
           path={'/'}
           exact={true}
-          render={() => auth.data ? <Home /> : <Redirect to={{ pathname: '/login' }} />}
+          render={() =>isUserLoggedIn(auth) ? <Home /> : <Redirect to={{ pathname: '/login' }} />}
         />
         <Route component={() => (<h1>404 Not found</h1>)}/>
       </Switch>

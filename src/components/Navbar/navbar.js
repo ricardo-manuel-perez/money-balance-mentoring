@@ -20,8 +20,9 @@ const settings = ['Logout'];
 
 const Navbar = () => {
   const auth = useAuth();
-  const user = auth.data ? auth.data.user : undefined;
+  const user = auth.data ? auth.data : undefined;
   const Logout = () => {
+    alert('ToDo Logout!!');
     return;
   }
   const [anchorElNav, setAnchorElNav] = React.useState(null);
