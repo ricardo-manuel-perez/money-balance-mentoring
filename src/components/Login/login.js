@@ -10,18 +10,15 @@ import Typography from '@mui/material/Typography';
 import Banner from '../../assets/images/login-banner.png';
 import { loginWithGoogle } from '../../utils/Auth/google-authentication';
 import { useHistory } from "react-router-dom";
-export default function Login() {
 
-  const history = useHistory();
+const Login = () => {
 
-  const onLoginSuccess = (data) => {
-    console.log(data);
-    history.push('/home');
-  }
+  let history = useHistory();
 
-  const handleLogin = (e) => {
+  function handleLogin(e) {
     e.preventDefault();
-    loginWithGoogle(onLoginSuccess)
+    loginWithGoogle();
+    history.push('/home');
   }
 
   return (
@@ -63,7 +60,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleLogin}
+              onClick={ (e) => handleLogin(e) }
             >
               Sign in with google
             </Button>
@@ -73,3 +70,5 @@ export default function Login() {
     </Grid>
   );
 }
+
+export default Login;
