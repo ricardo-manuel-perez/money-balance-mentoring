@@ -19,7 +19,7 @@ const Login = () => {
     history.push("/home");
   };
 
-  const handleLogin = (e) => {
+  function handleLogin(e) {
     e.preventDefault();
     loginWithGoogle(onLoginSuccess);
   };
@@ -65,7 +65,7 @@ const Login = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleLogin}
+              onClick={ (e) => handleLogin(e) }
             >
               Sign in with google
             </Button>

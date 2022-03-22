@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-function Home() {
+const Home = () => {
   const [accounts] = useState([
     {
       name: 'Account 1',
