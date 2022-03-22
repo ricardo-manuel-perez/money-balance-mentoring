@@ -22,7 +22,7 @@ const Login = () => {
   function handleLogin(e) {
     e.preventDefault();
     loginWithGoogle(onLoginSuccess);
-  };
+  }
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
