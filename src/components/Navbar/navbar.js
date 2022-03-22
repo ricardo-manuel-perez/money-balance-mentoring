@@ -20,7 +20,6 @@ const settings = ['Logout'];
 
 const Navbar = () => {
   const auth = useAuth();
-  const user = auth.data ? auth.data : undefined;
   const Logout = () => {
     alert('ToDo Logout!!');
     return;
@@ -117,18 +116,19 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+            {!auth.isLoading && auth.data && (<Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
               <Box className='user-name'>
                 <Typography color="white" component="h1" variant="h6">
-                  { user.displayName } 
+                  { auth.data.displayName } 
                 </Typography>
               </Box>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={ user.displayName } src={ user.photoURL } />
+                  <Avatar alt={ auth.data.displayName } src={ auth.data.photoURL } />
                 </IconButton>
               </Tooltip>
-            </Box>
+            </Box>)}
+            
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
