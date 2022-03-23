@@ -24,7 +24,7 @@ const ProtectedRoute = (route) => {
           return (
             <Redirect
               to={{
-                pathname: "/",
+                pathname: "/login",
                 state: { from: location },
               }}
             ></Redirect>
@@ -38,8 +38,8 @@ const ProtectedRoute = (route) => {
 const Routes = () => {
   return (
     <Switch>
-      <Route path={"/"} exact component={Login} />
-      {/* <Route path={'/home'} exam component={Home}/> */}
+      <Route path={"/login"} exact component={Login} />
+      <ProtectedRoute exact path={'/'} component={Home}/>
       <ProtectedRoute exact path={"/home"} component={Home} />
       <Route component={() => <h1>404 Not found</h1>} />
     </Switch>
