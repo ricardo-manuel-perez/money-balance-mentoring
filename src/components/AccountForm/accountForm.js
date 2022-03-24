@@ -37,6 +37,7 @@ const AccountForm = ({ accountId = null }) => {
                 submitLabel={ isEdit ? 'Actualizar cuenta' : 'Agregar cuenta'}
                 formInputs={[
                     {
+                        interface: 'input',
                         type: 'text',
                         label: 'Nombre de la cuenta',
                         name: 'name',
@@ -48,6 +49,7 @@ const AccountForm = ({ accountId = null }) => {
                         value: formAccount.name
                     },
                     {
+                        interface: 'input',
                         type: 'number',
                         label: 'Monto inicial',
                         name: 'amount',
@@ -59,6 +61,7 @@ const AccountForm = ({ accountId = null }) => {
                         value: formAccount.amount
                     },
                     {
+                        interface: 'select',
                         type: 'select',
                         label: 'Tipo de cuenta',
                         name: 'type',

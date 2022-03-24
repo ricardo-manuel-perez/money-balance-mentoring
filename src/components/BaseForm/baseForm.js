@@ -5,13 +5,13 @@ import { TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Button from "@mui/material/Button";
 
-const TextInput = ( props ) => {
+const TextInput = (props) => {
     return (
         <div className="form-group">
             <TextField id="outlined-basic"
                 fullWidth
                 margin='normal'
-                label={props.label}variant="outlined"
+                label={props.label} variant="outlined"
                 type={props.type}
                 name={props.name}
                 onChange={props.onChange}
@@ -30,7 +30,7 @@ TextInput.propTypes = {
     value: PropTypes.any
 }
 
-const SelectInput = ( props ) => {
+const SelectInput = (props) => {
     return (
         <div className="form-group">
             <TextField
@@ -38,14 +38,14 @@ const SelectInput = ( props ) => {
                 fullWidth
                 margin='normal'
                 select
-                label={props.label}variant="outlined"
+                label={props.label} variant="outlined"
                 type={props.type}
                 name={props.name}
                 onChange={props.onChange}
                 onBlur={props.onBlur}
-                value={props.value} 
+                value={props.value}
                 helperText={props.helperText}
-                >
+            >
                 {props.options.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                         {option.label}
@@ -67,56 +67,34 @@ SelectInput.propTypes = {
     options: PropTypes.array
 }
 
+const inputTypes = {
+    // with this solution you can spread your props instead of passing prop by prop
+    input: (attributes) => <TextInput {...attributes} />,
+    select: (attributes) => <SelectInput {...attributes} />,
+};
+
 const CustomForm = ({ initialValues, onSubmit, formInputs, submitLabel }) => {
     return (
         <Formik
-            initialValues={ initialValues }
-            validate={(values) => { console.log(values) }}
+            initialValues={initialValues}
+            validate={(values) => {
+                console.log(values);
+            }}
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
                     onSubmit(values);
                     setSubmitting(false);
                 }, 800);
-            }}>
-            {({
-                handleSubmit,
-                isSubmitting
-            }) => (
+            }}
+        >
+            {({ handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
-                    {
-                        formInputs.map((inputForm, index) => {
-                            switch(inputForm.type) {
-                                case 'text':
-                                    return <TextInput key={index}
-                                        type={ inputForm.type }
-                                        label= { inputForm.label }
-                                        name= { inputForm.name }
-                                        onChange= { inputForm.onChange }
-                                        onBlur= { inputForm.onBlur }
-                                        value= { inputForm.value } />;
-                                case 'number':
-                                    return <TextInput key={index}
-                                        type={ inputForm.type }
-                                        label= { inputForm.label }
-                                        name= { inputForm.name }
-                                        onChange= { inputForm.onChange }
-                                        onBlur= { inputForm.onBlur }
-                                        value= { inputForm.value } />;
-                                case 'select':
-                                    return <SelectInput key={index}
-                                        type={ inputForm.type }
-                                        label= { inputForm.label }
-                                        name= { inputForm.name }
-                                        onChange= { inputForm.onChange }
-                                        onBlur= { inputForm.onBlur }
-                                        value= { inputForm.value }
-                                        helperText= { inputForm.helperText }
-                                        options= { inputForm.options } />;
-                                default: 
-                                    return <span key={index}></span>;
-                            }
-                        })
-                    }
+                    {formInputs.map((inputForm, index) => {
+                        return inputTypes[inputForm.interface]({
+                            ...inputForm,
+                            key: index,
+                        });
+                    })}
                     <div className="form-group">
                         <Button
                             fullWidth
@@ -125,7 +103,7 @@ const CustomForm = ({ initialValues, onSubmit, formInputs, submitLabel }) => {
                             type="submit"
                             disabled={isSubmitting}
                         >
-                            { submitLabel }
+                            {submitLabel}
                         </Button>
                     </div>
                 </form>
