@@ -77,9 +77,9 @@ const CustomForm = ({ initialValues, onSubmit, formInputs, submitLabel }) => {
     return (
         <Formik
             initialValues={initialValues}
-            validate={(values) => {
+            /*validate={(values) => {
                 console.log(values);
-            }}
+            }}*/
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
                     onSubmit(values);
