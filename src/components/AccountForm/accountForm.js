@@ -7,7 +7,6 @@ import { updateAccount } from '../../services/Account/account';
 
 
 const emptyAccount = {
-    uid: '',
     owner: '',
     name: '',
     description: '',
@@ -31,19 +30,27 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
     const isEdit = selectedAccount !== undefined;
 
     const sendRequestToUpdate = () => {
-        updateAccount(selectedAccount.id, {
-            name: formAccount.name,
-            description: formAccount.description,
-            balance: formAccount.balance
-        });
+        try {
+            updateAccount(selectedAccount.id, {
+                name: formAccount.name,
+                description: formAccount.description,
+                balance: formAccount.balance
+            });
+        }catch(e) {
+            console.error(e);
+        }
     }
     
     const sendRequesToAdd = () => {
-        postAccount({
-            ... formAccount,
-            uid: user.uid,
-            owner: user.displayName
-        });
+        try {
+            postAccount({
+                ... formAccount,
+                uid: user.uid,
+                owner: user.displayName
+            });
+        }catch(e) {
+            console.error(e);
+        }
     }
 
     const onSubmit = () => {
@@ -78,7 +85,6 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
                             ...formAccount,
                             name: e.target.value
                         })},
-                        //onBlur: () => { },
                         value: formAccount.name
                     },
                     {
@@ -90,7 +96,6 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
                             ...formAccount,
                             description: e.target.value
                         })},
-                        //onBlur: () => { },
                         value: formAccount.description
                     },
                     {
@@ -104,30 +109,7 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
                         })},
                         onBlur: () => { },
                         value: formAccount.balance
-                    },
-                    /*{
-                        interface: 'select',
-                        type: 'select',
-                        label: 'Tipo de cuenta',
-                        name: 'type',
-                        onChange: (e) => { updateFormAccount({
-                            ...formAccount,
-                            type: e.target.value
-                        })},
-                        onBlur: () => { },
-                        value: formAccount.type,
-                        helperText: "Selecciona un tipo de cuenta",
-                        options: [
-                            {
-                                value: 1,
-                                label: 'Type one',
-                            },
-                            {
-                                value: 2,
-                                label: 'Type two',
-                            }
-                        ]
-                    }*/
+                    }
                 ]} />
             <h1>Account to add</h1>
             <code>{JSON.stringify(formAccount)}</code>
