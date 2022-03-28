@@ -12,7 +12,7 @@ import AccountForm from '../AccountForm/accountForm';
 import { useAuth } from '../../utils/Auth/use-auth';
 import { getAccountsQuery } from '../../services/Account/account';
 import { onSnapshot } from 'firebase/firestore';
-import { financial } from '../../utils/utils/format';
+import { currencyFormatter } from '../../utils/utils/format';
 
 const Home = () => {
   const auth = useAuth();
@@ -24,15 +24,17 @@ const Home = () => {
   const handleClose = () => { setOpen(false); setSelectedAccount(undefined); }
 
   useEffect(() => {
-    const accountsQuery = getAccountsQuery(user.uid);
-    const unsubscribe = onSnapshot(accountsQuery, (querySnapshot) => {
-      const accounts = [];
-      querySnapshot.forEach((doc) => {
-        accounts.push({ ...doc.data(), id: doc.id });
+    if(auth.data && !auth.isLoading){
+      const accountsQuery = getAccountsQuery(user.uid);
+      const unsubscribe = onSnapshot(accountsQuery, (querySnapshot) => {
+        const accounts = [];
+        querySnapshot.forEach((doc) => {
+          accounts.push({ ...doc.data(), id: doc.id });
+        });
+        setAccountsState(accounts);
       });
-      setAccountsState(accounts);
-    });
-    return () => unsubscribe();
+      return () => unsubscribe();
+    }
   }, []);
 
   function handleEdit(account) {
@@ -74,7 +76,7 @@ const Home = () => {
                     <strong>{a.name}</strong>
                   </Typography>
                   <Typography component="h1" variant="h6">
-                    <strong>{financial(a.balance)}</strong>
+                    <strong>{currencyFormatter.format(a.balance)}</strong>
                   </Typography>
                   <Button
                     className='edit-button'
