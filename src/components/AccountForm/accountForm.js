@@ -1,38 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BaseForm from '../BaseForm/baseForm';
 import PropTypes from 'prop-types';
+import { useAuth } from '../../utils/Auth/use-auth';
+import { postAccount } from '../../services/Account/account';
+import { updateAccount } from '../../services/Account/account';
 
-const AccountForm = ({ accountId = null }) => {
-    const [formAccount, setFormAccount] = useState({
-        name: '',
-        amount: 0,
-        type: 1
-    });
+
+const emptyAccount = {
+    owner: '',
+    name: '',
+    description: '',
+    balance: 0
+}
+
+const AccountForm = ({ closeForm, selectedAccount }) => {
+    const auth = useAuth();
+    const user = auth?.data;
+    const [formAccount, setFormAccount] = useState(emptyAccount);
+
+    useEffect(() => {
+        updateFormAccount(selectedAccount);
+    }, [selectedAccount]);
 
     const updateFormAccount = (newFormAccount) => {
-        setFormAccount(newFormAccount);
+        if (newFormAccount)
+            setFormAccount(newFormAccount);
     }
 
-    const isEdit = accountId !== null;
+    const isEdit = selectedAccount !== undefined;
 
     const sendRequestToUpdate = () => {
-        alert('update account');
+        try {
+            updateAccount(selectedAccount.id, {
+                name: formAccount.name,
+                description: formAccount.description,
+                balance: formAccount.balance
+            });
+        }catch(e) {
+            console.error(e);
+        }
+    }
+    
+    const sendRequesToAdd = () => {
+        try {
+            postAccount({
+                ... formAccount,
+                uid: user.uid,
+                owner: user.displayName
+            });
+        }catch(e) {
+            console.error(e);
+        }
     }
 
-    const onSubmit = (data) => {
-        if (isEdit)
-            sendRequestToUpdate();
-        setFormAccount(data);
+    const onSubmit = () => {
+        if (isEdit) {
+            new Promise((resolve) => {
+                sendRequestToUpdate();
+                resolve();
+            })
+            .then(() => closeForm())
+        } else {
+            new Promise((resolve) => {
+                sendRequesToAdd();
+                resolve();
+            })
+            .then(() => closeForm())
+        }
     };
 
     return (
         <div className="App">
             <h1>{isEdit ? 'Edit Account' : 'Add Account'}</h1>
-            <BaseForm initialValues={{
-                    name: '',
-                    amount: 0,
-                    type: 1
-                }}
+            <BaseForm initialValues={emptyAccount}
                 onSubmit={onSubmit}
                 submitLabel={ isEdit ? 'Actualizar cuenta' : 'Agregar cuenta'}
                 formInputs={[
@@ -45,43 +85,30 @@ const AccountForm = ({ accountId = null }) => {
                             ...formAccount,
                             name: e.target.value
                         })},
-                        //onBlur: () => { },
                         value: formAccount.name
+                    },
+                    {
+                        interface: 'input',
+                        type: 'text',
+                        label: 'Descripción de la cuenta',
+                        name: 'description',
+                        onChange: (e) => { updateFormAccount({
+                            ...formAccount,
+                            description: e.target.value
+                        })},
+                        value: formAccount.description
                     },
                     {
                         interface: 'input',
                         type: 'number',
                         label: 'Monto inicial',
-                        name: 'amount',
+                        name: 'balance',
                         onChange: (e) => { updateFormAccount({
                             ...formAccount,
-                            amount: e.target.value
+                            balance: e.target.value
                         })},
                         onBlur: () => { },
-                        value: formAccount.amount
-                    },
-                    {
-                        interface: 'select',
-                        type: 'select',
-                        label: 'Tipo de cuenta',
-                        name: 'type',
-                        onChange: (e) => { updateFormAccount({
-                            ...formAccount,
-                            type: e.target.value
-                        })},
-                        onBlur: () => { },
-                        value: formAccount.type,
-                        helperText: "Selecciona un tipo de cuenta",
-                        options: [
-                            {
-                                value: 1,
-                                label: 'Type one',
-                            },
-                            {
-                                value: 2,
-                                label: 'Type two',
-                            }
-                        ]
+                        value: formAccount.balance
                     }
                 ]} />
             <h1>Account to add</h1>
@@ -91,7 +118,8 @@ const AccountForm = ({ accountId = null }) => {
 }
 
 AccountForm.propTypes = {
-    accountId: PropTypes.string
+    closeForm: PropTypes.func.isRequired,
+    selectedAccount: PropTypes.object
 }
 
 export default AccountForm;
