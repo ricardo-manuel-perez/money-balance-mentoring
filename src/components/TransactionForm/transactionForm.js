@@ -23,7 +23,7 @@ const TransactionForm = ({ closeForm, accountId, accountBalance }) => {
     
     const sendRequesToAdd = () => {
         try {
-            if(formTransaction.type === TransactionType.deposit || accountBalance >= formTransaction.amount)
+            if(formTransaction.type === TransactionType.deposit || parseInt(accountBalance) >=  parseInt(formTransaction.amount))
             {
                 new Promise((resolve) => {
                     postTransaction(accountId,
