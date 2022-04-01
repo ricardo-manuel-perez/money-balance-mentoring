@@ -13,6 +13,8 @@ import { useAuth } from '../../utils/Auth/use-auth';
 import { getAccountsQuery } from '../../services/Account/account';
 import { onSnapshot } from 'firebase/firestore';
 import { currencyFormatter } from '../../utils/utils/format';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
   const auth = useAuth();
@@ -22,6 +24,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true)
   const handleClose = () => { setOpen(false); setSelectedAccount(undefined); }
+  let history = useHistory();
 
   useEffect(() => {
     if(auth.data && !auth.isLoading){
@@ -40,6 +43,10 @@ const Home = () => {
   function handleEdit(account) {
     setSelectedAccount(account);
     handleOpen();
+  }
+
+  const goToTransactions = (path) => {
+    history.push(path);
   }
 
   return (<>
@@ -78,29 +85,44 @@ const Home = () => {
                   <Typography component="h1" variant="h6">
                     <strong>{currencyFormatter.format(a.balance)}</strong>
                   </Typography>
-                  <Button
-                    className='edit-button'
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={() => handleEdit(a)}
-                  >
-                    <ModeEditIcon />
-                    Detalles
-                  </Button>
-                  <Button
-                    className='delete-button'
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="error"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={() => { }}
-                  >
-                    <DeleteForeverIcon />
-                    Eliminar
-                  </Button>
+                  <Box>
+                    <Button
+                      className='edit-button'
+                      type="button"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => handleEdit(a)}
+                    >
+                      <ModeEditIcon />
+                      Detalles
+                    </Button>
+                    <Button
+                      className='delete-button'
+                      type="button"
+                      fullWidth
+                      variant="contained"
+                      color="error"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => { }}
+                    >
+                      <DeleteForeverIcon />
+                      Eliminar
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button
+                      className='transactions-button'
+                      type="button"
+                      variant="contained"
+                      color="success"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => goToTransactions(`/accounts/${a.id}/transactions`)}
+                    >
+                      <ReceiptIcon />
+                      Transacciones
+                    </Button>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
