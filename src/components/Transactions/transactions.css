@@ -1,0 +1,45 @@
+.transactions {
+    text-align: center;
+    margin: 1rem 10rem;
+    padding: 1rem;
+}
+.transaction-card {
+    margin: 1rem;
+    min-height: 20rem;
+}
+.transaction-content {
+    min-height: 15rem;
+}
+.add-button {
+    max-width: 20rem;
+    background-color: #6cc070;
+}
+.column {
+    float: left;
+    width: 33.33%;
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.back-button {
+    float: left;
+    margin-top: 5rem;
+}
+.truncate {
+    min-height: 3rem;
+    margin: 1rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 2; 
+    -webkit-box-orient: vertical;
+ }
+.truncate:hover {
+    cursor: pointer;
+}
+.amount {
+    padding: 2rem 0;
+}
