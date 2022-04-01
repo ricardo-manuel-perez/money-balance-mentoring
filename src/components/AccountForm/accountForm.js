@@ -71,7 +71,7 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
 
     return (
         <div className="App">
-            <h1>{isEdit ? 'Edit Account' : 'Add Account'}</h1>
+            <h1>{isEdit ? 'Editar cuenta' : 'Agregar cuenta'}</h1>
             <BaseForm initialValues={emptyAccount}
                 onSubmit={onSubmit}
                 submitLabel={ isEdit ? 'Actualizar cuenta' : 'Agregar cuenta'}
@@ -101,8 +101,11 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
                     {
                         interface: 'input',
                         type: 'number',
-                        label: 'Monto inicial',
+                        label: 'Monto',
                         name: 'balance',
+                        inputProps: isEdit && {
+                            readOnly: true
+                        },
                         onChange: (e) => { updateFormAccount({
                             ...formAccount,
                             balance: e.target.value
