@@ -1,11 +1,14 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { query, where, updateDoc, doc } from "firebase/firestore";
+
+
+const accountsRef = collection(db, 'ACCOUNTS');
 
 export async function postAccount(accountData) {
     try {
         const newAccountData = await addDoc(
-            collection(db, 'ACCOUNTS'),
+            accountsRef,
             accountData
         );
         return newAccountData;
@@ -16,7 +19,7 @@ export async function postAccount(accountData) {
 
 export function getAccountsQuery(userUid) {
     return query(
-        collection(db, 'ACCOUNTS'),
+        accountsRef,
         where("uid", "==", userUid)
     );
 }
@@ -29,4 +32,9 @@ export async function updateAccount(id, updatedAccountData) {
     } catch (error) {
         console.error(error);
     }
+}
+
+export async function getAccountQuery(accountiId) {
+    let docu = doc(db, "ACCOUNTS", accountiId);
+    return await getDoc(docu);
 }
