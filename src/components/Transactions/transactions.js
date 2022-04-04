@@ -12,10 +12,10 @@ import { useHistory } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { currencyFormatter } from '../../utils/utils/format';
 import TransactionForm from '../TransactionForm/transactionForm';
-import { onSnapshot } from 'firebase/firestore';
 import { getTransactionsQuery } from '../../services/Transaction/transaction';
 import { Badge } from '@mui/material';
 import { TransactionType } from '../../utils/utils/constants';
+import { UseGetEntity } from '../../services/Entity/entity';
 
 const Transactions = () => {
     const auth = useAuth();
@@ -26,30 +26,16 @@ const Transactions = () => {
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false);
     let history = useHistory();
-    const [transactionsState, setTransactionsState] = useState([]);
-
-    useEffect(() => {
-      if(auth.data && !auth.isLoading){
-        const transactionsQuery = getTransactionsQuery(accountId);
-        const unsubscribe = onSnapshot(transactionsQuery, (querySnapshot) => {
-          const transactions = [];
-          querySnapshot.forEach((doc) => {
-            transactions.push({ ...doc.data(), id: doc.id });
-          });
-          setTransactionsState(transactions);
-        });
-        return () => unsubscribe();
-      }
-    }, []);
+    let transactionsState = UseGetEntity(getTransactionsQuery(accountId));
 
     useEffect(() => {
         setIsLoading(true);
         if(auth.data && !auth.isLoading) {
-            getAccountQuery(accountId).then(result => 
-                setAccountsState(result.data())
+            getAccountQuery(accountId).then(result =>
+              setAccountsState(result.data())
             ).finally(() => setIsLoading(false));
         }
-    }, [accountId, handleClose]);
+    }, [accountId, accountState]);
 
     return (accountState ? <>
         <Navbar />
@@ -82,37 +68,37 @@ const Transactions = () => {
             </CardContent>
           </Card>
           <div className="row">
-            {transactionsState.map((t, i) => {
+            {transactionsState.map((transaction, i) => {
               return (<div className="column" key={i}>
                 <Card className='transaction-card'>
                   <CardContent sx={{ flex: '1 0 auto' }}>
                     <Box className='transaction-content'>
                       <Typography component="h1" variant="h4">
-                        <strong>{t.title}</strong>
+                        <strong>{transaction.title}</strong>
                       </Typography>
-                      { t.type === TransactionType.deposit ? 
+                      { transaction.type === TransactionType.deposit ? 
                         <Badge badgeContent={<Typography component="h3" variant="h6">Depósito</Typography>} color="success">
                         </Badge> 
                         :
                         <Badge badgeContent={<Typography component="h3" variant="h6">Retiro</Typography>} color="error">
                         </Badge>
                       }
-                      <Tooltip title={t.description}>
+                      <Tooltip title={transaction.description}>
                         <div className='truncate'>
-                          {t.description}
+                          {transaction.description}
                         </div>
                       </Tooltip>
                       <Typography component="h1" variant="h6" className='amount'>
                         {'Monto: '}
-                        { t.type === TransactionType.deposit ? 
-                            currencyFormatter.format(t.amount)
+                        { transaction.type === TransactionType.deposit ? 
+                            currencyFormatter.format(transaction.amount)
                           :
-                          ' - ' + currencyFormatter.format(t.amount)
+                          ' - ' + currencyFormatter.format(transaction.amount)
                         }
                       </Typography>
                       <Typography component="h6">
                         <strong>{'Fecha: '}</strong>
-                        { new Date(t.date).toLocaleString() }
+                        { new Date(transaction.date).toLocaleString() }
                       </Typography>
                     </Box>
                   </CardContent>
