@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './home.css';
 import Navbar from '../Navbar/navbar';
 import { Card, CardContent, Modal } from '@mui/material';
@@ -11,35 +11,28 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AccountForm from '../AccountForm/accountForm';
 import { useAuth } from '../../utils/Auth/use-auth';
 import { getAccountsQuery } from '../../services/Account/account';
-import { onSnapshot } from 'firebase/firestore';
 import { currencyFormatter } from '../../utils/utils/format';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import { useHistory } from 'react-router-dom';
+import { UseGetEntity } from '../../services/Entity/entity';
 
 const Home = () => {
   const auth = useAuth();
   const user = auth?.data;
-  const [accountsState, setAccountsState] = useState([]);
+  const accountsState = UseGetEntity(getAccountsQuery(user.uid));
   const [selectedAccount, setSelectedAccount] = useState(undefined);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true)
   const handleClose = () => { setOpen(false); setSelectedAccount(undefined); }
-
-  useEffect(() => {
-    if(auth.data && !auth.isLoading){
-      const accountsQuery = getAccountsQuery(user.uid);
-      const unsubscribe = onSnapshot(accountsQuery, (querySnapshot) => {
-        const accounts = [];
-        querySnapshot.forEach((doc) => {
-          accounts.push({ ...doc.data(), id: doc.id });
-        });
-        setAccountsState(accounts);
-      });
-      return () => unsubscribe();
-    }
-  }, []);
+  let history = useHistory();
 
   function handleEdit(account) {
     setSelectedAccount(account);
     handleOpen();
+  }
+
+  const goToTransactions = (path) => {
+    history.push(path);
   }
 
   return (<>
@@ -67,40 +60,55 @@ const Home = () => {
         </CardContent>
       </Card>
       <div className="row">
-        {accountsState.map((a, i) => {
+        {accountsState.map((account, i) => {
           return (<div className="column" key={i}>
             <Card className='account-card'>
               <CardContent sx={{ flex: '1 0 auto' }}>
                 <Box>
                   <Typography component="h1" variant="h4">
-                    <strong>{a.name}</strong>
+                    <strong>{account.name}</strong>
                   </Typography>
                   <Typography component="h1" variant="h6">
-                    <strong>{currencyFormatter.format(a.balance)}</strong>
+                    <strong>{currencyFormatter.format(account.balance)}</strong>
                   </Typography>
-                  <Button
-                    className='edit-button'
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={() => handleEdit(a)}
-                  >
-                    <ModeEditIcon />
-                    Detalles
-                  </Button>
-                  <Button
-                    className='delete-button'
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="error"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={() => { }}
-                  >
-                    <DeleteForeverIcon />
-                    Eliminar
-                  </Button>
+                  <Box>
+                    <Button
+                      className='edit-button'
+                      type="button"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => handleEdit(account)}
+                    >
+                      <ModeEditIcon />
+                      Detalles
+                    </Button>
+                    <Button
+                      className='delete-button'
+                      type="button"
+                      fullWidth
+                      variant="contained"
+                      color="error"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => { }}
+                    >
+                      <DeleteForeverIcon />
+                      Eliminar
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button
+                      className='transactions-button'
+                      type="button"
+                      variant="contained"
+                      color="success"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={() => goToTransactions(`/accounts/${account.id}/transactions`)}
+                    >
+                      <ReceiptIcon />
+                      Transacciones
+                    </Button>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>

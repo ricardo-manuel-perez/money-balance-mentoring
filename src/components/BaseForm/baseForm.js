@@ -16,7 +16,8 @@ const TextInput = (props) => {
                 name={props.name}
                 onChange={props.onChange}
                 onBlur={props.onBlur}
-                value={props.value} />
+                value={props.value}
+                inputProps={props.inputProps} />
         </div>
     )
 }
@@ -27,7 +28,8 @@ TextInput.propTypes = {
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func,
-    value: PropTypes.any
+    value: PropTypes.any,
+    inputProps: PropTypes.object
 }
 
 const SelectInput = (props) => {
@@ -45,6 +47,7 @@ const SelectInput = (props) => {
                 onBlur={props.onBlur}
                 value={props.value}
                 helperText={props.helperText}
+                inputProps={props.inputProps}
             >
                 {props.options.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -64,7 +67,8 @@ SelectInput.propTypes = {
     onBlur: PropTypes.func,
     value: PropTypes.any,
     helperText: PropTypes.string,
-    options: PropTypes.array
+    options: PropTypes.array,
+    inputProps: PropTypes.object
 }
 
 const inputTypes = {

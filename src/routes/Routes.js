@@ -8,6 +8,8 @@ import {
 import Login from "../components/Login/login";
 import { useAuth } from "../utils/Auth/use-auth";
 import Home from "../components/Home/home";
+import Transactions from "../components/Transactions/transactions";
+import NotFound from "../components/NotFound/notFound";
 
 const ProtectedRoute = (route) => {
   const auth = useAuth();
@@ -41,7 +43,9 @@ const Routes = () => {
       <Route path={"/login"} exact component={Login} />
       <ProtectedRoute exact path={'/'} component={Home}/>
       <ProtectedRoute exact path={"/home"} component={Home} />
-      <Route component={() => <h1>404 Not found</h1>} />
+      <ProtectedRoute exact path={"/accounts"} component={Home} />
+      <ProtectedRoute exact path={"/accounts/:accountId/transactions"} component={Transactions} />
+      <Route component={() => <NotFound></NotFound>} />
     </Switch>
   );
 };
