@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { useAuth } from '../../utils/Auth/use-auth';
 
-export const UseGetEntity = (entityQuery) => {
+export const UseGetEntity = (entityQuery, customCall = null) => {
     const auth = useAuth();
     const [entitiesState, setEntitiesState] = useState([]);
     useEffect(() => {
@@ -16,6 +16,6 @@ export const UseGetEntity = (entityQuery) => {
             });
             return () => unsubscribe();
         }
-    }, [entityQuery]);
+    },[customCall]);
     return entitiesState;
 }

@@ -19,7 +19,8 @@ import { UseGetEntity } from '../../services/Entity/entity';
 const Home = () => {
   const auth = useAuth();
   const user = auth?.data;
-  const accountsState = UseGetEntity(getAccountsQuery(user.uid));
+  const accountsQuery = getAccountsQuery(user.uid);
+  const accountsState = UseGetEntity(accountsQuery);
   const [selectedAccount, setSelectedAccount] = useState(undefined);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true)
