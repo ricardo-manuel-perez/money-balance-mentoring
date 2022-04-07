@@ -43,3 +43,7 @@
 .amount {
     padding: 2rem 0;
 }
+
+.date-picker {
+    margin: 1rem !important;
+}
