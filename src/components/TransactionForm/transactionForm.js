@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { postTransaction } from '../../services/Transaction/transaction';
 import { TransactionType } from '../../utils/utils/constants';
 import { updateAccount } from '../../services/Account/account';
-
+import { Box, Typography } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
 
 const emptyTransaction = {
     title: '',
@@ -15,6 +16,8 @@ const emptyTransaction = {
 
 const TransactionForm = ({ closeForm, accountId, accountBalance }) => {
     const [formTransaction, setFormTransaction] = useState(emptyTransaction);
+    const theme = useTheme();
+    const mode = theme?.palette?.mode;
 
     const updateFormTransaction = (newFormTransaction) => {
         if (newFormTransaction)
@@ -61,7 +64,9 @@ const TransactionForm = ({ closeForm, accountId, accountBalance }) => {
 
     return (
         <div className="App">
-            <h1>{'Agregar transacción'}</h1>
+            <Typography component="h1" variant="h4" style={{color: mode === 'dark' ? 'white' : 'inherit'}} >
+                {'Agregar transacción'}
+            </Typography>
             <BaseForm initialValues={emptyTransaction}
                 onSubmit={onSubmit}
                 submitLabel={'Agregar transacción'}
@@ -126,8 +131,10 @@ const TransactionForm = ({ closeForm, accountId, accountBalance }) => {
                         ]
                     }
                 ]} />
-            <h1>Transaction to add</h1>
-            <code>{JSON.stringify(formTransaction)}</code>
+            <Box style={{color: mode === 'dark' ? 'white' : 'inherit'}} >
+                <h1>Transaction to add</h1>
+                <code>{JSON.stringify(formTransaction)}</code>
+            </Box>
         </div>
     );
 }
