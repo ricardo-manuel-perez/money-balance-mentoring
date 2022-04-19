@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { useAuth } from '../../utils/Auth/use-auth';
 import { postAccount } from '../../services/Account/account';
 import { updateAccount } from '../../services/Account/account';
-
+import { Box, Typography } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
 
 const emptyAccount = {
     owner: '',
@@ -17,6 +18,8 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
     const auth = useAuth();
     const user = auth?.data;
     const [formAccount, setFormAccount] = useState(emptyAccount);
+    const theme = useTheme();
+    const mode = theme?.palette?.mode;
 
     useEffect(() => {
         updateFormAccount(selectedAccount);
@@ -70,8 +73,10 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
     };
 
     return (
-        <div className="App">
-            <h1>{isEdit ? 'Editar cuenta' : 'Agregar cuenta'}</h1>
+        <Box className="App">
+            <Typography component="h1" variant="h4" style={{color: mode === 'dark' ? 'white' : 'inherit'}} >
+                {isEdit ? 'Editar cuenta' : 'Agregar cuenta'}
+            </Typography>
             <BaseForm initialValues={emptyAccount}
                 onSubmit={onSubmit}
                 submitLabel={ isEdit ? 'Actualizar cuenta' : 'Agregar cuenta'}
@@ -103,9 +108,9 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
                         type: 'number',
                         label: 'Monto',
                         name: 'balance',
-                        inputProps: isEdit && {
+                        inputProps: isEdit ? {
                             readOnly: true
-                        },
+                        } : {},
                         onChange: (e) => { updateFormAccount({
                             ...formAccount,
                             balance: e.target.value
@@ -114,9 +119,11 @@ const AccountForm = ({ closeForm, selectedAccount }) => {
                         value: formAccount.balance
                     }
                 ]} />
-            <h1>Account to add</h1>
-            <code>{JSON.stringify(formAccount)}</code>
-        </div>
+            <Box style={{color: mode === 'dark' ? 'white' : 'inherit'}} >
+                <h1>Account to add</h1>
+                <code>{JSON.stringify(formAccount)}</code>
+            </Box>
+        </Box>
     );
 }
 
