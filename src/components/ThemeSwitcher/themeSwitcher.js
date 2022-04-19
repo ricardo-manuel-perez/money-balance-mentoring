@@ -11,7 +11,7 @@ function ThemeSwitcher({mode, setMode}) {
         <>
             <Switch checked={mode === 'light' ? false : true}
                 onChange={() => {
-                let selectedMode = mode === 'light' ? 'dark' : 'light';
+                const selectedMode = mode === 'light' ? 'dark' : 'light';
                 localStorage.setItem('mode', selectedMode);
                 setMode(selectedMode);
                 } } /> {'Tema: ' + (mode === 'light' ? 'claro' : 'oscuro')}
