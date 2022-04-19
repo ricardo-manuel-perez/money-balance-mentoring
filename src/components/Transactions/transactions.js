@@ -8,8 +8,6 @@ import { Card, CardContent, Typography, Button, Modal, Tooltip, Divider, TextFie
 import AddIcon from '@mui/icons-material/Add';
 import NotFound from '../NotFound/notFound';
 import './transactions.css';
-import { useHistory } from 'react-router-dom';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { currencyFormatter } from '../../utils/utils/format';
 import TransactionForm from '../TransactionForm/transactionForm';
 import { getTransactionsQuery } from '../../services/Transaction/transaction';
@@ -17,6 +15,7 @@ import { Badge } from '@mui/material';
 import { TransactionType } from '../../utils/utils/constants';
 import { UseGetEntity } from '../../services/Entity/entity';
 import DateTimePicker from '@mui/lab/DateTimePicker';
+import { Link } from 'react-router-dom';
 
 const Transactions = () => {
   const auth = useAuth();
@@ -26,7 +25,6 @@ const Transactions = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false);
-  let history = useHistory();
   const initialFiler = {
     type: 3,
     date: {
@@ -65,8 +63,8 @@ const Transactions = () => {
 
   return (accountState ? <>
     <Navbar />
-    <Box>
-      <Button className='back-button' onClick={() => history.push('/accounts')}><ArrowBackIosIcon />Volver</Button>
+    <Box className='back-button'>
+      <Link to={'/accounts'}>Volver</Link>
     </Box>
     <div className="transactions">
       <Card>
