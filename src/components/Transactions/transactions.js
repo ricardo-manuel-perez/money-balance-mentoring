@@ -4,15 +4,14 @@ import { useParams } from 'react-router-dom';
 import { getAccountQuery } from '../../services/Account/account';
 import { useAuth } from '../../utils/Auth/use-auth';
 import Navbar from '../Navbar/navbar';
-import { Card, CardContent, Typography, Button, Modal, Tooltip, Divider, TextField, MenuItem } from '@mui/material';
+import { Card, CardContent, Typography, Button, Divider, TextField, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import NotFound from '../NotFound/notFound';
 import './transactions.css';
 import { currencyFormatter } from '../../utils/utils/format';
-import TransactionForm from '../TransactionForm/transactionForm';
+import TransactionsModal from './transactionsModal';
+import TransactionsList from './transactionsList';
 import { getTransactionsQuery } from '../../services/Transaction/transaction';
-import { Badge } from '@mui/material';
-import { TransactionType } from '../../utils/utils/constants';
 import { UseGetEntity } from '../../services/Entity/entity';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { Link } from 'react-router-dom';
@@ -147,67 +146,9 @@ const Transactions = () => {
           </Box>
         </CardContent>
       </Card>
-      <div className="row">
-        {transactionsState.map((transaction, i) => {
-          return (<div className="column" key={i}>
-            <Card className='transaction-card'>
-              <CardContent sx={{ flex: '1 0 auto' }}>
-                <Box className='transaction-content'>
-                  <Typography component="h1" variant="h4">
-                    <strong>{transaction.title}</strong>
-                  </Typography>
-                  {transaction.type === TransactionType.deposit ?
-                    <Badge badgeContent={<Typography component="h3" variant="h6">Depósito</Typography>} color="success">
-                    </Badge>
-                    :
-                    <Badge badgeContent={<Typography component="h3" variant="h6">Retiro</Typography>} color="error">
-                    </Badge>
-                  }
-                  <Tooltip title={transaction.description}>
-                    <div className='truncate'>
-                      {transaction.description}
-                    </div>
-                  </Tooltip>
-                  <Typography component="h1" variant="h6" className='amount'>
-                    {'Monto: '}
-                    {transaction.type === TransactionType.deposit ?
-                      currencyFormatter.format(transaction.amount)
-                      :
-                      ' - ' + currencyFormatter.format(transaction.amount)
-                    }
-                  </Typography>
-                  <Typography component="h6">
-                    <strong>{'Fecha: '}</strong>
-                    {new Date(transaction.date).toLocaleString()}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </div>)
-        })}
-      </div>
+      <TransactionsList transactionsState={transactionsState} />
     </div>
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 800,
-        height: 'auto',
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        borderRadius: 10,
-        p: 4
-      }}>
-        <TransactionForm closeForm={handleClose} accountId={accountId} accountBalance={accountState.balance} />
-      </Box>
-    </Modal>
+    <TransactionsModal open={open} handleClose={handleClose} accountId={accountId} balance={accountState.balance}/>
   </> : (!isLoading && <NotFound></NotFound>)
   );
 };
