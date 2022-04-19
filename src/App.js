@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useState, Suspense } from "react";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Routes from "./routes/Routes";
@@ -11,26 +11,19 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 function App() {
   const queryClient = new QueryClient();
-  const [mode, setMode] = useState(() => {
-    let localMode = localStorage.getItem('mode') || 'light'
-    return localMode;
-  });
-
-  const [theme, setTheme] = useState(
-    createTheme({
-      palette: {
-        mode: mode
-      },
-    })
-  );
-
-  useEffect(() => {
-      setTheme(createTheme({
+  const createCustomTheme = (mode) => createTheme({
         palette: {
           mode: mode
         }
-      }))
-  }, [mode, setMode]);
+  })
+  const [theme, setTheme] = useState(() =>{
+    const localMode = localStorage.getItem('mode') || 'light'
+    return createCustomTheme(localMode)
+  })
+  const handleThemeChange = (mode) =>{
+    const theme = createCustomTheme(mode);
+    setTheme(theme);
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -38,7 +31,7 @@ function App() {
         <AuthProvider>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Suspense fallback={<div>Loading ...</div>}>
-              <ThemeSwitcher mode={mode} setMode={setMode} />
+              <ThemeSwitcher mode={theme.palette.mode} setMode={(mode) => handleThemeChange(mode)} />
               <Routes />
             </Suspense>
 
