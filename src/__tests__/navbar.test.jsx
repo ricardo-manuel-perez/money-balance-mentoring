@@ -12,8 +12,8 @@ const mockedUseAuth = useAuth;
 const mockedAuthProvider = UseProvideAuth;
 const mockecdGetAuth = getAuth;
 // Mock the module
-// jest.mock("../utils/Auth/use-auth");
-// jest.mock("../utils/Auth/auth-provider");
+jest.mock("../utils/Auth/use-auth");
+jest.mock("../utils/Auth/auth-provider");
 jest.mock("firebase/auth");
 const mockLogout = jest.fn();
 describe("Navbar", () => {
@@ -23,7 +23,7 @@ describe("Navbar", () => {
   );
   beforeEach(() => {
     mockedUseAuth.mockImplementation(() => ({ isLoading: true }));
-    // mockedAuthProvider.mockImplementation(jest.fn(() => ));
+    // mockedAuthProvider.mockImplementation(jest.fn());
     mockecdGetAuth.mockImplementation(
       jest.fn(() => ({
         onAuthStateChanged: { displayName: "mock", photoURL: "url" },
@@ -34,8 +34,8 @@ describe("Navbar", () => {
     jest.clearAllMocks();
   });
   it("Navbar", async () => {
-    // const { result, waitFor } = renderHook(() => UseProvideAuth(), { wrapper });
-    // await waitFor(() => result);
+    const { result, waitFor } = renderHook(() => UseProvideAuth(), { wrapper });
+    await waitFor(() => result);
     render(
       <MockAuthContext
         {...{ authState: { isLoading: true, error: null, data: null } }}
