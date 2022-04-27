@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import Navbar from "../components/Navbar/navbar";
 import { MockAuthContext } from "../__mocks__/authContext";
@@ -6,10 +7,10 @@ import { useAuth } from "../utils/Auth/use-auth";
 import { getAuth } from "firebase/auth";
 import { afterEach, beforeEach, describe, it } from "@jest/globals";
 import { QueryClientProvider, QueryClient } from "react-query";
-import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react-hooks";
 import UseProvideAuth from "../utils/Auth/auth-provider";
+
 const mockedUseAuth = useAuth;
-const mockedAuthProvider = UseProvideAuth;
 const mockecdGetAuth = getAuth;
 // Mock the module
 jest.mock("../utils/Auth/use-auth");
@@ -23,7 +24,6 @@ describe("Navbar", () => {
   );
   beforeEach(() => {
     mockedUseAuth.mockImplementation(() => ({ isLoading: true }));
-    // mockedAuthProvider.mockImplementation(jest.fn());
     mockecdGetAuth.mockImplementation(
       jest.fn(() => ({
         onAuthStateChanged: { displayName: "mock", photoURL: "url" },
