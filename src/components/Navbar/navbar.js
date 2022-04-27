@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { ReactComponent as HomeLogo } from "../../assets/svg/money-icon.svg";
 import "./navbar.css";
 import { useAuth } from "../../utils/Auth/use-auth";
+import PropTypes from 'prop-types';
 
 const pages = [];
 const settings = ["Logout"];
@@ -164,5 +165,9 @@ const Navbar = ({ handleLogout }) => {
     </AppBar>
   );
 };
+
+Navbar.propTypes = {
+  handleLogout: PropTypes.func.isRequired
+}
 
 export default Navbar;

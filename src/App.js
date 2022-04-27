@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar/navbar";
 import ThemeSwitcher from "./components/ThemeSwitcher/themeSwitcher";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { logout } from "./utils/Auth/google-authentication";
 
 function App() {
   const queryClient = new QueryClient();
@@ -37,7 +38,7 @@ function App() {
                 mode={theme.palette.mode}
                 setMode={(mode) => handleThemeChange(mode)}
               />
-              <Navbar />
+              <Navbar handleLogout={logout} />
               <Routes />
             </Suspense>
           </LocalizationProvider>
