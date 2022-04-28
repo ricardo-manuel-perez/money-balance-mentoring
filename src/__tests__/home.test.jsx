@@ -16,7 +16,7 @@ const mockecdGetAuth = getAuth;
 jest.mock("../utils/Auth/use-auth");
 jest.mock("../utils/Auth/auth-provider");
 jest.mock("firebase/auth");
-describe("Home", () => {
+describe("Test home component", () => {
   const queryClient = new QueryClient();
   const wrapper = ({ children }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -32,16 +32,20 @@ describe("Home", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it("Home", async () => {
+  it("Home when isLoading is true", async () => {
     const { result, waitFor } = renderHook(() => UseProvideAuth(), { wrapper });
     await waitFor(() => result);
     render(
       <MockAuthContext
         {...{ authState: { isLoading: true, error: null, data: null } }}
       >
-        <Home user={mockedUseAuth?.data} />
+        <Home {...{ user: { uid: '123123123'} }} />
       </MockAuthContext>
     );
     expect(screen.findAllByAltText("Cuentas disponibles")).toBeDefined();
+    // expect(window.location.href).toEqual('')
   });
+  it("Home when isLoading is false and error has values", () =>{
+    
+  })
 });
