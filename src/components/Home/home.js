@@ -8,16 +8,14 @@ import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AccountForm from "../AccountForm/accountForm";
-import { useAuth } from "../../utils/Auth/use-auth";
 import { getAccountsQuery } from "../../services/Account/account";
 import { currencyFormatter } from "../../utils/utils/format";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import { useHistory } from "react-router-dom";
 import { UseGetEntity } from "../../services/Entity/entity";
+import PropTypes from 'prop-types';
 
-const Home = () => {
-  const auth = useAuth();
-  const user = auth?.data;
+const Home = ({ user }) => {
   const accountsQuery = getAccountsQuery(user.uid);
   const accountsState = UseGetEntity(accountsQuery);
   const [selectedAccount, setSelectedAccount] = useState(undefined);
@@ -156,5 +154,9 @@ const Home = () => {
     </>
   );
 };
+
+Home.propTypes = {
+  user: PropTypes.object.isRequired
+}
 
 export default Home;

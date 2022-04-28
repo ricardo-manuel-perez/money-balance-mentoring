@@ -38,12 +38,15 @@ const ProtectedRoute = (route) => {
 };
 
 const Routes = () => {
+  const auth = useAuth();
+  const user = auth?.data;
+
   return (
     <Switch>
       <Route path={"/login"} exact component={Login} />
-      <ProtectedRoute exact path={'/'} component={Home}/>
-      <ProtectedRoute exact path={"/home"} component={Home} />
-      <ProtectedRoute exact path={"/accounts"} component={Home} />
+      <ProtectedRoute exact path={'/'} component={() => <Home user={user}/>}/>
+      <ProtectedRoute exact path={"/home"} component={() => <Home user={user}/>} />
+      <ProtectedRoute exact path={"/accounts"} component={() => <Home user={user}/>} />
       <ProtectedRoute exact path={"/accounts/:accountId/transactions"} component={Transactions} />
       <Route component={() => <NotFound></NotFound>} />
     </Switch>
