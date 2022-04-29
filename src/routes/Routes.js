@@ -10,6 +10,9 @@ import { useAuth } from "../utils/Auth/use-auth";
 import Home from "../components/Home/home";
 import Transactions from "../components/Transactions/transactions";
 import NotFound from "../components/NotFound/notFound";
+import { getAccountsQuery } from "../services/Account/account";
+import { UseGetEntity } from "../services/Entity/entity";
+import { useHistory } from "react-router-dom";
 
 const ProtectedRoute = (route) => {
   const auth = useAuth();
@@ -40,13 +43,15 @@ const ProtectedRoute = (route) => {
 const Routes = () => {
   const auth = useAuth();
   const user = auth?.data;
-
+  const accountsQuery = user?.uid && getAccountsQuery(user.uid);
+  const accountsStateParam = accountsQuery ? UseGetEntity(accountsQuery) : [];
+  let history = useHistory();
   return (
     <Switch>
       <Route path={"/login"} exact component={Login} />
-      <ProtectedRoute exact path={'/'} component={() => <Home user={user}/>}/>
-      <ProtectedRoute exact path={"/home"} component={() => <Home user={user}/>} />
-      <ProtectedRoute exact path={"/accounts"} component={() => <Home user={user}/>} />
+      <ProtectedRoute exact path={'/'} component={() => <Home { ...{accountsStateParam, history} }/>}/>
+      <ProtectedRoute exact path={"/home"} component={() => <Home { ...{accountsStateParam, history} }/>} />
+      <ProtectedRoute exact path={"/accounts"} component={() => <Home { ...{accountsStateParam, history} }/>} />
       <ProtectedRoute exact path={"/accounts/:accountId/transactions"} component={Transactions} />
       <Route component={() => <NotFound></NotFound>} />
     </Switch>

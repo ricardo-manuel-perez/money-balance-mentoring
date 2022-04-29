@@ -8,16 +8,12 @@ import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AccountForm from "../AccountForm/accountForm";
-import { getAccountsQuery } from "../../services/Account/account";
 import { currencyFormatter } from "../../utils/utils/format";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import { useHistory } from "react-router-dom";
-import { UseGetEntity } from "../../services/Entity/entity";
 import PropTypes from 'prop-types';
 
-const Home = ({ user }) => {
-  const accountsQuery = getAccountsQuery(user.uid);
-  const accountsState = UseGetEntity(accountsQuery);
+const Home = ({ accountsStateParam, history }) => {
+  const [accountsState, setAccountsState] = useState(accountsStateParam ? accountsStateParam : []);
   const [selectedAccount, setSelectedAccount] = useState(undefined);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -25,7 +21,6 @@ const Home = ({ user }) => {
     setOpen(false);
     setSelectedAccount(undefined);
   };
-  let history = useHistory();
 
   function handleEdit(account) {
     setSelectedAccount(account);
@@ -64,7 +59,7 @@ const Home = ({ user }) => {
           {accountsState.map((account, i) => {
             return (
               <div className="column" key={i}>
-                <Card className="account-card">
+                <Card id='account-card' className="account-card">
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Box>
                       <Typography component="h1" variant="h4">
@@ -93,8 +88,12 @@ const Home = ({ user }) => {
                           fullWidth
                           variant="contained"
                           color="error"
+                          id="delete-account"
                           sx={{ mt: 3, mb: 2 }}
-                          onClick={() => {}}
+                          onClick={() => {
+                            const filteredAccountState = accountsState.filter(accountList => accountList.id !== account.id);
+                            setAccountsState(filteredAccountState);
+                          }}
                         >
                           <DeleteForeverIcon />
                           Eliminar
@@ -106,6 +105,7 @@ const Home = ({ user }) => {
                           type="button"
                           variant="contained"
                           color="success"
+                          id="go-to-transaction"
                           sx={{ mt: 3, mb: 2 }}
                           onClick={() =>
                             goToTransactions(
@@ -156,7 +156,8 @@ const Home = ({ user }) => {
 };
 
 Home.propTypes = {
-  user: PropTypes.object.isRequired
+  accountsStateParam: PropTypes.array.isRequired,
+  history: PropTypes.any.isRequired
 }
 
 export default Home;
